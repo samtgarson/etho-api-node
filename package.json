@@ -8,9 +8,9 @@
     "express": "~4.0.0",
     "instagram-node-lib": "^0.1.1",
     "jwt-simple": "^0.3.0",
-    "mongoose": "^3.6.20",
+    "mongoose": "^4.0.6",
     "q": "^1.4.1",
-    "request": "^2.58.0"
+    "request-promise": "^0.4.2"
   },
   "scripts": {
     "start": "nodemon index.js"
