@@ -14,8 +14,8 @@ var MediaSchema = new Schema({
     taggedUsers: [],
     caption: String,
     _id: {type: String, unique: true},
-    colour: String,
-    palette: [{}]
+    palette: [{}],
+    processed: {type: Boolean, default: false}
 });
 
 module.exports = mongoose.model('Media', MediaSchema);

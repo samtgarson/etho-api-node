@@ -1,5 +1,6 @@
 var User = require('../models/user'),
     jwt = require('jwt-simple'),
+    methods = require('../middlewares/methods'),
     ig = require('instagram-node-lib');
 
 module.exports = function(req, res, next) {
@@ -16,6 +17,7 @@ module.exports = function(req, res, next) {
                 ig.set('access_token', user.token);
                 req.user = user;
                 next();
+                methods.updateUser(user._id, user.token);
             }
         });
 
