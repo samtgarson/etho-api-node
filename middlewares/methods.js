@@ -4,6 +4,7 @@ var Media = require('../models/media'),
     colorThief = require('color-thief'),
     User = require('../models/user'),
     q = require('q'),
+    season = require('date-season')({autumn: true}),
     thief = new colorThief();
 
 module.exports = {
@@ -55,15 +56,24 @@ module.exports = {
                 caption: m.caption.text,
                 _id: m.id
             });
-            var colours = q(request({url: media.url, encoding: null}));
 
-            colours.then(function(buffer) {
+            var prom = {
+                colours: q(request({url: media.url, encoding: null})),
+                season: q.fcall(function () {
+                    media.season = season(media.created);
+                    return media.season;
+                })
+            };
+
+            prom.colours.then(function(buffer) {
                 media.palette = thief.getPalette(buffer, 4, 5);
             });
 
-            q.all([colours]).then(function() {
+
+            q.all(prom).then(function() {
                 media.processed = true;
                 media.save();
+                // console.log(media);
             });
         }
     }

@@ -39,8 +39,28 @@ function getTags (req, res) {
     }
 }
 
+function getSeasons (req, res) {
+    var h = {}, c = [];
+    Media.find({user: req.user._id}, function(err, a) {
+        a.forEach(function(m) {
+            if (!h[m.season]) h[m.season] = 0;
+            h[m.season] ++;
+        });
+        Object.keys(h).forEach(function(k) {
+            c.push({season: k, count: h[k]});
+        });
+        res.json( c.sort(function(a, b){return b.count - a.count;}) );
+    });
+
+    function addSeason (t) {
+        if (!h[t]) h[t] = 0;
+        h[t] ++;
+    }
+}
+
 router.get('/', getUser);
 router.get('/stream', getStream);
 router.get('/tags', getTags);
+router.get('/seasons', getSeasons);
 
 module.exports = router;

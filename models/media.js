@@ -15,7 +15,8 @@ var MediaSchema = new Schema({
     caption: String,
     _id: {type: String, unique: true},
     palette: [{}],
-    processed: {type: Boolean, default: false}
+    processed: {type: Boolean, default: false},
+    season: String
 });
 
 module.exports = mongoose.model('Media', MediaSchema);
