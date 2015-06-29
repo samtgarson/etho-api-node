@@ -9,6 +9,7 @@
     "express": "~4.0.0",
     "instagram-node-lib": "^0.1.1",
     "jwt-simple": "^0.3.0",
+    "moment": "^2.10.3",
     "mongoose": "^4.0.6",
     "q": "^1.4.1",
     "request-promise": "^0.4.2"

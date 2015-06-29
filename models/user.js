@@ -6,10 +6,12 @@ var UserSchema = new Schema({
     name: String,
     bio: String, 
     profile_picture: String,
-    _id: {type: String, unique: true},
+    _id: {type: Number, unique: true},
     username: String,
     website: String,
-    counts: {}
+    counts: {},
+    processed: Boolean,
+    last_updated: Number
 });
 
 module.exports = mongoose.model('User', UserSchema);

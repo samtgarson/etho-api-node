@@ -13,7 +13,7 @@ var MediaSchema = new Schema({
     url: String,
     taggedUsers: [],
     caption: String,
-    _id: {type: String, unique: true},
+    _id: {type: Number, unique: true},
     palette: [{}],
     processed: {type: Boolean, default: false},
     season: String
