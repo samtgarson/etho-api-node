@@ -1,8 +1,15 @@
 var app = require('express'), 
     router = app.Router(),
     ig = require('instagram-node-lib'),
-    Media = require('../models/media'),
-    methods = require('../middlewares/methods');
+    Rainbow = require('color-rainbow'),
+    colour = require('color'),
+    q = require('q'),
+    Media = require('../models/media');
+
+var rainbow = Rainbow.create(100).map(function(c) {
+        return c.hexString();
+    }),
+    nearestColor = require('nearest-color').from(rainbow);
 
 var router = app.Router();
 
@@ -58,9 +65,39 @@ function getSeasons (req, res) {
     }
 }
 
+function getColours (req, res) {
+    var o = {
+        map : function() {
+            this.palette.forEach(function(raw, i) {
+                emit( raw, i==1?2:1 );
+            });
+        },
+        reduce : function(col, vals) {
+            console.log(col);
+            return Array.sum(vals);
+        }
+    };
+    Media.mapReduce(o, function(err, c) {
+        if (err) res.status(500).json(err);
+        var list = {}, arr = [];
+        c.forEach(function(current) {
+            var col = nearestColor( current._id );
+            if (!list[col]) list[col] = 0;
+            list[col] += current.value;
+        });
+        for (var col in list) {
+            arr.push({colour: col, value: list[col]});
+        }
+
+        res.json(arr);
+    });
+
+}
+
 router.get('/', getUser);
 router.get('/stream', getStream);
 router.get('/tags', getTags);
 router.get('/seasons', getSeasons);
+router.get('/colours', getColours);
 
 module.exports = router;

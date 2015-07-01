@@ -14,7 +14,7 @@ var MediaSchema = new Schema({
     taggedUsers: [],
     caption: String,
     _id: {type: Number, unique: true},
-    palette: [{}],
+    palette: [String],
     processed: {type: Boolean, default: false},
     season: String
 });

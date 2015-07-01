@@ -1,6 +1,6 @@
 var User = require('../models/user'),
     jwt = require('jwt-simple'),
-    methods = require('../middlewares/methods'),
+    updates = require('../middlewares/updates'),
     moment = require('moment'),
     ig = require('instagram-node-lib');
 
@@ -19,7 +19,7 @@ module.exports = function(req, res, next) {
                 req.user = user;
                 next();
                 if ( moment(user.lastUpdated).add(1, 'd').isBefore(moment(), 'day') ) {
-                    methods.updateUser(user._id, user.token);
+                    updates.updateUser(user._id, user.token);
                 }
             }
         });

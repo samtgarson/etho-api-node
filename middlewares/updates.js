@@ -7,11 +7,11 @@ var Media = require('../models/media'),
     q = require('q'),
     season = require('date-season')({autumn: true}),
     moment = require('moment'),
+    colour = require('color'),
     thief = new colorThief();
 
 module.exports = {
     updateUser: function (id, token, cb) {
-        var done = [];
         if (!cb) cb = function() {};
         ig.users.info({
             user_id: 'self', 
@@ -87,7 +87,7 @@ module.exports = {
         });
 
         function processMedia (m, id) {
-            var media = new Media ({
+            var media = {
                 user: id,
                 isVideo: m.type != "image",
                 tags: m.tags,
@@ -100,26 +100,21 @@ module.exports = {
                 taggedUsers: m.users_in_photo,
                 caption: m.caption.text,
                 _id: parseInt(m.id)
-            });
-
-            var prom = {
-                colours: q(request({url: media.url, encoding: null})),
-                season: q.fcall(function () {
-                    media.season = season(media.created);
-                    return media.season;
-                })
             };
 
-            prom.colours.then(function(buffer) {
-                media.palette = thief.getPalette(buffer, 4, 5);
-            });
-
-
-            q.all(prom).then(function() {
+            request({url: media.url, encoding: null}, function(err, r, buffer) {
+                media.palette = thief.getPalette(buffer, 4, 5).map(converter);
+                media.season = season(media.created);
                 media.processed = true;
-                media.save();
-                // console.log(media);
+
+                console.log(media);
+                Media.findOneAndUpdate({_id: media._id}, media, {upsert: true}).exec();
+
+                function converter (n) {
+                    return colour().rgb(n).hexString();
+                }
             });
         }
+
     }
 };

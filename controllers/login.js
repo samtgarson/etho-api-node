@@ -4,7 +4,7 @@ var app = require('express'),
     jwt = require('jwt-simple'),
     ig = require('instagram-node-lib'),
     User = require('../models/user'),
-    methods = require('../middlewares/methods'),
+    updates = require('../middlewares/updates'),
     result;
 
 var router = app.Router();
@@ -41,8 +41,8 @@ function getInstaUser (body){
     } else {
         ig.set('access_token', r.access_token);
         User.findOne({_id: r.user.id}, function(err, user) {
-            methods.updateUser(r.user.id, r.access_token, returnToken);
-            methods.updateStream(r.user.id);
+            updates.updateUser(r.user.id, r.access_token, returnToken);
+            updates.updateStream(r.user.id);
         });
     }
 }
