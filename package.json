@@ -22,7 +22,6 @@
     "start": "node index.js"
   },
   "devDependencies": {
-    "global-request-logger": "0.0.1",
     "morgan": "^1.6.0"
   }
 }

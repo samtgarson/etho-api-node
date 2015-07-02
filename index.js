@@ -3,29 +3,19 @@ var express    = require('express'),
     bodyParser = require('body-parser'),
     morgan = require('morgan'),
     ig = require('instagram-node-lib'),
-    mongoose = require('mongoose'),
-    globalLog = require('global-request-logger');
+    mongoose = require('mongoose');
 
 
 require('dotenv').load();
 // globalLog.initialize();
 mongoose.connect(process.env.MONGOLAB_URI);
 
-globalLog.on('success', function(request, response) {
-  console.log('SUCCESS');
-  console.log('Request', request);
-  console.log('Response', response);
-});
- 
-globalLog.on('error', function(request, response) {
-  console.log('ERROR');
-  console.log('Request', request);
-  console.log('Response', response);
-});
-
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(morgan('dev'));
+
+if (process.env.NPM_CONFIG_PRODUCTION) {
+  app.use(morgan('dev'));
+}
 
 var port = process.env.PORT || 8081;
 
