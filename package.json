@@ -16,12 +16,12 @@
     "mongoose": "^4.0.6",
     "nearest-color": "^0.4.0",
     "q": "^1.4.1",
-    "request-promise": "^0.4.2"
+    "request-promise": "^0.4.2",
+    "morgan": "^1.6.0"
   },
   "scripts": {
     "start": "node index.js"
   },
   "devDependencies": {
-    "morgan": "^1.6.0"
   }
 }

@@ -12,10 +12,7 @@ mongoose.connect(process.env.MONGOLAB_URI);
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-
-if (process.env.NPM_CONFIG_PRODUCTION) {
-  app.use(morgan('dev'));
-}
+app.use(morgan('dev'));
 
 var port = process.env.PORT || 8081;
 
