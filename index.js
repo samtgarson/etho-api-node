@@ -9,7 +9,7 @@ var express    = require('express'),
 
 require('dotenv').load();
 // globalLog.initialize();
-mongoose.connect(process.env.DB_PATH);
+mongoose.connect(process.env.MONGOLAB_URI);
 
 globalLog.on('success', function(request, response) {
   console.log('SUCCESS');

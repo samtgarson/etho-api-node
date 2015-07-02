@@ -19,7 +19,7 @@
     "request-promise": "^0.4.2"
   },
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "node index.js"
   },
   "devDependencies": {
     "global-request-logger": "0.0.1",

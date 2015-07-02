@@ -73,7 +73,6 @@ function getColours (req, res) {
             });
         },
         reduce : function(col, vals) {
-            console.log(col);
             return Array.sum(vals);
         }
     };

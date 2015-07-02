@@ -107,7 +107,6 @@ module.exports = {
                 media.season = season(media.created);
                 media.processed = true;
 
-                console.log(media);
                 Media.findOneAndUpdate({_id: media._id}, media, {upsert: true}).exec();
 
                 function converter (n) {
