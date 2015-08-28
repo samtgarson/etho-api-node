@@ -1,4 +1,4 @@
-# insta-dash-api
+# Etho Api
 
 > Personal dashboard for your Instagram account
 
