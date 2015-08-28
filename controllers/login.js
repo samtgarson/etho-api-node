@@ -50,7 +50,6 @@ function getInstaUser (body){
 // Make JWT token and return it
 function returnToken (err, user) {
     if (err) result.status(500).json({error_message: 'Unable to save to database.'});
-    console.log(user);
     var today = new Date(),
         expires = new Date().setDate(today.getDate() + 7),
         token = jwt.encode({

@@ -27,3 +27,12 @@ build/Release
 node_modules
 
 .env
+
+.DS_Store
+._*
+*.sublime-project
+*.sublime-workspace
+node_modules
+.sass-cache
+.htaccess
+bower_components

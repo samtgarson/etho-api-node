@@ -28,7 +28,7 @@ module.exports = {
                     processed: true,
                     last_updated: moment().valueOf()
                 };
-                getFollows({id: u._id, skip: true}, 'follows', 0, 2);
+                getEdges({id: u._id}, 'follows', 0, 2);
                 User.findOneAndUpdate({_id: id}, u, {upsert: true}, function(err, old_user) {
                     cb(err, u);
                 });
@@ -37,12 +37,12 @@ module.exports = {
 
 
 
-        function processFriends (user, target, layer, limit, action) {
+        function processUsers (user, target, layer, limit, action) {
             new Relationship(qBuild(action, user, target)).save();
             if (layer < limit) {
                 User.findOne({_id: target}, function (err, u) {
                     if ( err || !u || moment(u.last_updated).add(5, 'd').isBefore(moment(), 'day') ) {
-                        getFollows({id:target, skip: false}, action, layer, limit);
+                        getEdges({id:target, new: true}, action, layer, limit);
                     }
                 });
             }
@@ -53,21 +53,24 @@ module.exports = {
             else return {_f: target, _t: user};
         }
 
-        function getFollows(user, action, layer, limit, cursor) {
-            if (!user.skip) {
-                new User({_id: user.id, last_updated: moment().valueOf()}).save();
-                Relationship.remove({_f: user.id}).exec();
+        function getEdges(user, action, layer, limit, cursor) {
+            if (user.new) {
+                User.findOneAndUpdate({_id: user.id}, {_id: user.id, last_updated: moment().valueOf()}, {upsert: true}).exec();
             }
+            if (!cursor) Relationship.remove({_f: user.id}).exec();
             ig.users[action]({
                 user_id: user.id, 
                 cursor: cursor,
                 complete: function(a, pagination) {
                     if (a.length) {
                         a.forEach(function (f) {
-                            processFriends(user.id, f.id, layer+1, limit, action);
+                            processUsers(user.id, f.id, layer+1, limit, action);
                         });
-                        if (pagination.next_cursor && pagination.next_cursor != cursor) getFollows({id: user.id, skip: true}, action, layer, limit, pagination.next_cursor);
+                        if (pagination.next_cursor && pagination.next_cursor != cursor) getEdges({id: user.id}, action, layer, limit, pagination.next_cursor);
                     }
+                },
+                error: function(err) {
+                    console.log(err);
                 }
             });
         }
@@ -91,7 +94,7 @@ module.exports = {
                 user: id,
                 isVideo: m.type != "image",
                 tags: m.tags,
-                location: [m.location.latitude, m.location.longitude],
+                location: m.location?[m.location.latitude, m.location.longitude]:false,
                 comments: m.comment,
                 created: new Date(parseInt(m.created_time) * 1000),
                 likes: m.likes,

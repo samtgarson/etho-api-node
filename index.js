@@ -1,3 +1,4 @@
+// MONGOLAB_URI=mongodb://heroku_lbblvk60:utb7schol72urg6cqaimc4dm9r@ds047468.mongolab.com:47468/heroku_lbblvk60
 var express    = require('express'),
     app        = express(),
     bodyParser = require('body-parser'),
