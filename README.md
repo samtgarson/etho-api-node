@@ -1,5 +1,5 @@
 # Etho Api
 
-> Personal dashboard for your Instagram account
+> Insight Engine for Instagram (API)
 
 API in Node.js
